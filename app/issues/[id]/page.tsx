@@ -6,6 +6,7 @@ import IssueDetails from "./IssueDetails";
 import DeleteIssueButton from "./DeleteIssueButton";
 import authOptions from "@/app/auth/authOprions";
 import { getServerSession } from "next-auth";
+import AssigneeSelect from "./AssigneeSelect";
 
 interface Props {
   params: { id: string };
@@ -22,13 +23,14 @@ const IssueDetailPage = async ({ params }: Props) => {
   if (!issue) notFound();
 
   return (
-    <Grid columns={{ initial: "1", sm: "5" }}>
+    <Grid columns={{ initial: "1", sm: "5" }} gap="2">
       <Box className="col-span-4">
         <IssueDetails issue={issue} />
       </Box>
       <Box>
         {session && (
           <Flex direction="column" gap="3">
+            <AssigneeSelect/>
             <EditIssueButton issueId={issue.id} />
             <DeleteIssueButton issueId={issue.id} />
           </Flex>
