@@ -9,30 +9,23 @@ import { Issue } from "@prisma/client";
 import toast, { Toaster } from "react-hot-toast";
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
-  const {
-    data: users,
-    isLoading,
-    error,
-  } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: () => axios.get("/api/users").then((res) => res.data),
-    staleTime: 1000 * 60,
-  });
-
+  const { data: users, isLoading, error } = useUsers();
   if (isLoading) return <Skeleton />;
   if (error) return null;
+
+  const assignedIssue = (userId: string) => {
+    axios
+      .patch("/api/issues/" + issue.id, {
+        assignedToUserId: userId === "unassigned" ? null : userId,
+      })
+      .catch(() => toast.error("Changes could not be saved."));
+  };
 
   return (
     <>
       <Select.Root
         defaultValue={issue.assignedToUserId || "unassigned"}
-        onValueChange={(userId) => {
-          axios
-            .patch("/api/issues/" + issue.id, {
-              assignedToUserId: userId === "unassigned" ? null : userId,
-            })
-            .catch(() => toast.error("Changes could not be saved."));
-        }}
+        onValueChange={assignedIssue}
       >
         <Select.Trigger placeholder="Assignee..." />
         <Select.Content>
@@ -51,5 +44,12 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
     </>
   );
 };
+
+const useUsers = () =>
+  useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: () => axios.get("/api/users").then((res) => res.data),
+    staleTime: 1000 * 60 * 60 * 24, //24h
+  });
 
 export default AssigneeSelect;
