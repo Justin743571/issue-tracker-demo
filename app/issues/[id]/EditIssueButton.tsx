@@ -1,11 +1,11 @@
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import { Button } from "@radix-ui/themes";
 import Link from "next/link";
-import React from "react";
 
-const IssueEditButton = ({ issueId }: { issueId: number }) => {
+const EditIssueButton = ({ issueId }: { issueId: number }) => {
+  
   return (
-    <Link href={`/issues/${issueId}/edit`}>
+    <Link href={`/issues/${issueId}/edit`} legacyBehavior>
       <Button>
         <Pencil2Icon />
         Edit Issue
@@ -14,4 +14,4 @@ const IssueEditButton = ({ issueId }: { issueId: number }) => {
   );
 };
 
-export default IssueEditButton;
+export default EditIssueButton;
