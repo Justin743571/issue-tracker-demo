@@ -5,6 +5,7 @@ export default function Home({
 }: {
   searchParams: { page: string };
 }) {
+  const page = parseInt(searchParams.page) || 1;
   return (
     <Pagination
       itemCount={100}
