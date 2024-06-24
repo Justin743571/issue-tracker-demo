@@ -15,6 +15,12 @@ const authOptions:AuthOptions = {
   session: {
     strategy: "jwt",
   },
+  callbacks: {
+    async redirect({ url, baseUrl }) {
+      // For Vercel deployment
+      return process.env.NEXTAUTH_URL || baseUrl;
+    },
+  },
 };
 
 
